@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Secure client document portal for Quick Funds Capital — send your bank statements, driver's license, and voided check to our funding team." />
+    <link rel="icon" href="data:," />
+    <title>Client Document Portal — Quick Funds Capital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <style>
+      :root{
+        --bg:#F7F9FC; --card:#FFFFFF; --ink:#0F1B2E; --muted:#5B6B84;
+        --navy:#071224; --green:#00D084; --green-dark:#008F5F; --green-soft:#E8FFF4;
+        --gold:#FFC531; --gold-soft:#FFF6D6; --line:#E6ECF3;
+        --red:#B42318; --red-soft:#FEF3F2; --radius:20px;
+        --shadow:0 20px 50px rgba(7,18,36,.12);
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#040B18; --card:#0B1E3D; --ink:#E6EEF8; --muted:#9FB0C9;
+          --navy:#071224; --green-soft:#12294F; --gold-soft:#231900;
+          --line:#263650; --red:#FECDCA; --red-soft:#2A1215;
+          --shadow:0 20px 50px rgba(0,0,0,.45);
+        }
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.55}
+      h1,h2,h3{font-family:Sora,Manrope,sans-serif;line-height:1.15;margin:0}
+      a{color:var(--green-dark)}
+      .wrap{max-width:880px;margin:0 auto;padding:0 20px}
+
+      /* Header — matches quickfundscapital.com */
+      header.site{background:var(--navy);position:sticky;top:0;z-index:50;box-shadow:0 6px 24px rgba(7,18,36,.25)}
+      .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+      .logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+      .logo-mark{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;color:var(--green);font-family:Sora;font-weight:800;font-size:20px;flex-shrink:0}
+      .logo-text{line-height:1}
+      .logo-text b{font-family:Sora;font-size:19px;letter-spacing:-.02em;display:block}
+      .logo-text span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8FA3BF;font-weight:800}
+      .nav-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+      .btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:12px 20px;font-family:Manrope;font-weight:800;font-size:15px;cursor:pointer;text-decoration:none;transition:transform .15s ease, box-shadow .15s ease}
+      .btn-green{background:var(--green);color:#04160E}
+      .btn-green:hover{background:#0be691}
+      .btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35)}
+      .btn-outline:hover{border-color:#fff}
+      .btn-sm{padding:9px 16px;font-size:14px}
+      .btn[disabled]{opacity:.65;cursor:wait}
+
+      /* Intro */
+      .intro{padding:44px 0 8px}
+      .intro h1{font-size:clamp(30px,5vw,42px);letter-spacing:-.02em}
+      .intro h1 .accent{color:var(--green-dark)}
+      .intro p.lede{font-size:18px;color:var(--muted);max-width:640px;margin:14px 0 0}
+      .intro-meta{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:20px;font-size:14.5px;font-weight:700}
+      .intro-meta span{display:inline-flex;align-items:center;gap:8px}
+      .intro-meta i{color:var(--green-dark)}
+
+      /* Checklist */
+      .checklist{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px;margin:28px 0 22px}
+      .checklist h2{font-size:17px;margin-bottom:14px}
+      .checklist ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 24px}
+      .checklist li{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;color:var(--muted)}
+      .checklist li .tick{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:12px;color:transparent;flex-shrink:0;transition:all .2s}
+      .checklist li.done{color:var(--ink)}
+      .checklist li.done .tick{background:var(--green);border-color:var(--green);color:#04160E}
+      .checklist li .count{margin-left:auto;font-size:13.5px;font-weight:800;color:var(--muted);white-space:nowrap}
+      .checklist li.done .count{color:var(--green-dark)}
+
+      /* Form card */
+      .form-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:30px 30px 34px;margin-bottom:26px}
+      .step-head{display:flex;align-items:center;gap:14px;margin:30px 0 6px}
+      .step-head:first-child{margin-top:0}
+      .step-num{width:36px;height:36px;border-radius:50%;background:var(--navy);color:var(--green);font-family:Sora;font-weight:800;font-size:16px;display:grid;place-items:center;flex-shrink:0}
+      @media (prefers-color-scheme: dark){.step-num{background:#12294F}}
+      .step-head h2{font-size:20px}
+      .step-sub{color:var(--muted);font-size:15px;margin:0 0 16px 50px}
+      .step-block{margin-left:50px}
+      .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+      .field{display:flex;flex-direction:column;gap:6px}
+      .field.full{grid-column:1/-1}
+      .field label{font-weight:800;font-size:14.5px}
+      .field label .req{color:var(--red)}
+      .field input[type=text],.field input[type=email],.field input[type=tel],.field select{
+        font:inherit;font-size:16px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);width:100%;
+      }
+      .field input:focus,.field select:focus{outline:2px solid var(--green);outline-offset:1px;border-color:var(--green)}
+      .field .hint{font-size:13.5px;color:var(--muted)}
+      .field .error{display:none;font-size:13.5px;font-weight:700;color:var(--red)}
+      .invalid{border-color:var(--red)!important}
+      .invalid + .error, .field.invalid-wrap .error{display:block}
+
+      .notice{display:none;border-radius:14px;padding:14px 16px;font-size:14.5px;font-weight:600;margin:0 0 16px 50px;background:var(--gold-soft);border:1px solid var(--gold)}
+      .notice.show{display:block}
+      .notice b{font-weight:800}
+
+      /* Dropzones */
+      .dropzone{border:2px dashed var(--line);border-radius:16px;padding:26px 20px;text-align:center;cursor:pointer;transition:border-color .15s, background .15s;background:transparent}
+      .dropzone:hover,.dropzone:focus-visible{border-color:var(--green);outline:none}
+      .dropzone.dragover{border-color:var(--green);background:var(--green-soft)}
+      .dropzone .dz-icon{font-size:30px;color:var(--green-dark);margin-bottom:8px}
+      .dropzone .dz-title{font-weight:800;font-size:16px}
+      .dropzone .dz-sub{color:var(--muted);font-size:13.5px;margin-top:2px}
+      .dropzone.has-file{border-style:solid;border-color:var(--green);background:var(--green-soft)}
+      .file-list{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+      .file-list:empty{margin:0}
+      .file-item{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:14.5px}
+      .file-item i.fa-file{color:var(--green-dark);font-size:18px;flex-shrink:0}
+      .file-item .fname{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+      .file-item .fsize{color:var(--muted);font-weight:700;font-size:13px;white-space:nowrap}
+      .file-item .thumb{width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0}
+      .file-remove{border:0;background:transparent;color:var(--red);cursor:pointer;font-size:16px;padding:6px;border-radius:8px;flex-shrink:0}
+      .file-remove:hover{background:var(--red-soft)}
+      .dz-error{display:none;font-size:13.5px;font-weight:700;color:var(--red);margin-top:10px}
+      .dz-error.show{display:block}
+      .dz-count{font-size:14px;font-weight:800;margin-top:12px;color:var(--muted)}
+      .dz-count.met{color:var(--green-dark)}
+
+      .form-alert{display:none;border-radius:14px;padding:14px 16px;font-size:14.5px;font-weight:600;margin-top:24px;background:var(--red-soft);border:1px solid var(--red);color:var(--red)}
+      .form-alert.show{display:block}
+      @media (prefers-color-scheme: dark){.form-alert{color:#FECDCA}}
+      .submit-row{margin-top:26px}
+      .btn-submit{width:100%;justify-content:center;font-size:17px;padding:16px 20px;border-radius:14px}
+      .submit-note{text-align:center;color:var(--muted);font-size:13.5px;margin-top:12px}
+      .spinner{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(4,22,14,.25);border-top-color:#04160E;animation:spin .8s linear infinite;vertical-align:-3px}
+      @keyframes spin{to{transform:rotate(360deg)}}
+      @media (prefers-reduced-motion: reduce){.spinner{animation:none} html{scroll-behavior:auto}}
+
+      /* Result panel */
+      .result{display:none}
+      .result.show{display:block}
+      .send-banner{display:flex;gap:12px;align-items:flex-start;border-radius:14px;padding:16px 18px;font-size:15px;margin-bottom:20px}
+      .send-banner i{font-size:22px;margin-top:2px}
+      .send-banner.sent{background:var(--green-soft);border:1px solid var(--green)}
+      .send-banner.sent i{color:var(--green-dark)}
+      .send-banner.fallback{background:var(--gold-soft);border:1px solid var(--gold)}
+      .send-banner.fallback i{color:#8A6500}
+      @media (prefers-color-scheme: dark){.send-banner.fallback i{color:var(--gold)}}
+      .result h2{font-size:24px;margin-bottom:8px}
+      .result p.intro-p{color:var(--muted);margin:0 0 18px}
+      .summary-box{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;font-size:14px;white-space:pre-wrap;word-break:break-word;max-height:320px;overflow:auto;margin-bottom:18px}
+      .result-actions{display:flex;flex-wrap:wrap;gap:10px}
+      .btn-navy{background:var(--navy);color:#fff}
+      .btn-navy:hover{background:#12294F}
+      .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+      .btn-ghost:hover{border-color:var(--muted)}
+      .copy-ok{font-size:13.5px;font-weight:800;color:var(--green-dark);align-self:center;display:none}
+      .copy-ok.show{display:inline}
+
+      footer.site{margin-top:44px;background:var(--navy);color:#B9C6D8;padding:30px 0 36px;font-size:14.5px}
+      footer.site .foot{display:flex;flex-wrap:wrap;gap:14px 34px;justify-content:space-between;align-items:center}
+      footer.site a{color:#7CFFC4;text-decoration:none;font-weight:700}
+      footer.site .foot-brand{color:#fff;font-family:Sora;font-weight:700;font-size:16px}
+
+      @media (max-width:640px){
+        .wrap{padding:0 16px}
+        .logo-text b{font-size:15px;white-space:nowrap}
+        .logo-text span{display:none}
+        .logo-mark{width:38px;height:38px;font-size:17px;border-radius:10px}
+        .nav-actions .btn-outline{display:none}
+        .checklist ul{grid-template-columns:1fr}
+        .form-card{padding:22px 18px 26px}
+        .grid2{grid-template-columns:1fr}
+        .step-sub,.step-block,.notice{margin-left:0}
+        .intro{padding-top:32px}
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site">
+      <div class="wrap nav">
+        <a class="logo" href="https://www.quickfundscapital.com/" aria-label="Quick Funds Capital — main site">
+          <span class="logo-mark">Q$</span>
+          <span class="logo-text"><b>Quick Funds Capital</b><span>Business Funding — Fast</span></span>
+        </a>
+        <div class="nav-actions">
+          <a class="btn btn-outline btn-sm" href="https://www.quickfundscapital.com/"><i class="fa-solid fa-arrow-left"></i> Main Site</a>
+          <a class="btn btn-green btn-sm" href="tel:+17542802842"><i class="fa-solid fa-phone"></i> (754) 280-2842</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="intro">
+        <h1>Client Document <span class="accent">Portal</span></h1>
+        <p class="lede">Already applied? Send the documents your funding advisor needs to finish your file. Everything you upload here goes straight to our funding team.</p>
+        <div class="intro-meta">
+          <span><i class="fa-solid fa-lock"></i> Sent to customerservice@quickfundscapital.com</span>
+          <span><i class="fa-solid fa-clock"></i> Takes about 2 minutes</span>
+          <span><i class="fa-solid fa-file-circle-check"></i> Any file type accepted</span>
+        </div>
+      </section>
+
+      <section class="checklist" aria-label="Upload checklist">
+        <h2>What you'll send</h2>
+        <ul>
+          <li id="ckDetails"><span class="tick"><i class="fa-solid fa-check"></i></span> Your information</li>
+          <li id="ckStatements"><span class="tick"><i class="fa-solid fa-check"></i></span> Bank statements <span class="count" id="ckStatementsCount">0 of 3 months</span></li>
+          <li id="ckLicense"><span class="tick"><i class="fa-solid fa-check"></i></span> Driver's license photo</li>
+          <li id="ckCheck"><span class="tick"><i class="fa-solid fa-check"></i></span> Voided check</li>
+        </ul>
+      </section>
+
+      <form class="form-card" id="docForm" novalidate>
+        <!-- Step 1 -->
+        <div class="step-head"><span class="step-num">1</span><h2>Your information</h2></div>
+        <p class="step-sub">So we can match your documents to your application.</p>
+        <div class="step-block">
+          <div class="grid2">
+            <div class="field">
+              <label for="fullName">Full name <span class="req">*</span></label>
+              <input type="text" id="fullName" autocomplete="name" placeholder="e.g. Jordan Smith" />
+              <span class="error">Please enter your full name.</span>
+            </div>
+            <div class="field">
+              <label for="bizName">Business name <span class="req">*</span></label>
+              <input type="text" id="bizName" autocomplete="organization" placeholder="e.g. Smith Logistics LLC" />
+              <span class="error">Please enter your business name.</span>
+            </div>
+            <div class="field">
+              <label for="email">Email <span class="req">*</span></label>
+              <input type="email" id="email" autocomplete="email" placeholder="you@yourbusiness.com" />
+              <span class="error">Please enter a valid email address.</span>
+            </div>
+            <div class="field">
+              <label for="phone">Phone <span class="req">*</span></label>
+              <input type="tel" id="phone" autocomplete="tel" placeholder="(555) 123-4567" />
+              <span class="error">Please enter a valid phone number.</span>
+            </div>
+            <div class="field full">
+              <label for="state">State you reside in <span class="req">*</span></label>
+              <select id="state">
+                <option value="">Select your state…</option>
+              </select>
+              <span class="hint">Your state sets how many months of bank statements we need — 4 months for California and New York, 3 months everywhere else.</span>
+              <span class="error">Please select the state you reside in.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-head"><span class="step-num">2</span><h2>Bank statements</h2></div>
+        <p class="step-sub" id="stmtSub">Add your <b>3 most recent months</b> of business bank statements — one file per month. PDF, CSV, Excel, Word, images, and every other file type are accepted.</p>
+        <div class="notice" id="caNyNotice"><i class="fa-solid fa-circle-info"></i> <b>California &amp; New York:</b> because you reside in <span id="caNyState">California</span>, we need <b>4 months</b> of bank statements instead of 3.</div>
+        <div class="step-block">
+          <div class="dropzone" id="stmtDrop" tabindex="0" role="button" aria-label="Add bank statement files">
+            <div class="dz-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <div class="dz-title">Tap to add statement files</div>
+            <div class="dz-sub">or drag &amp; drop them here — any file type, one file per month</div>
+          </div>
+          <input type="file" id="stmtInput" multiple hidden />
+          <div class="dz-count" id="stmtCount">0 of 3 months added</div>
+          <ul class="file-list" id="stmtList"></ul>
+          <div class="dz-error" id="stmtError"></div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-head"><span class="step-num">3</span><h2>Driver's license</h2></div>
+        <p class="step-sub">A clear photo of the <b>front</b> of your driver's license. Make sure the text is readable and all four corners are visible.</p>
+        <div class="step-block">
+          <div class="dropzone" id="licDrop" tabindex="0" role="button" aria-label="Add a photo of your driver's license">
+            <div class="dz-icon"><i class="fa-solid fa-id-card"></i></div>
+            <div class="dz-title">Tap to add your license photo</div>
+            <div class="dz-sub">Take a photo or upload a scan — image or PDF</div>
+          </div>
+          <input type="file" id="licInput" accept="image/*,.pdf" hidden />
+          <ul class="file-list" id="licList"></ul>
+          <div class="dz-error" id="licError">Please add a photo of your driver's license.</div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-head"><span class="step-num">4</span><h2>Voided check</h2></div>
+        <p class="step-sub">A photo or scan of a <b>voided check</b> from your business bank account — write “VOID” across the front of a blank check.</p>
+        <div class="step-block">
+          <div class="dropzone" id="chkDrop" tabindex="0" role="button" aria-label="Add a photo of your voided check">
+            <div class="dz-icon"><i class="fa-solid fa-money-check-dollar"></i></div>
+            <div class="dz-title">Tap to add your voided check</div>
+            <div class="dz-sub">Take a photo or upload a scan — image or PDF</div>
+          </div>
+          <input type="file" id="chkInput" accept="image/*,.pdf" hidden />
+          <ul class="file-list" id="chkList"></ul>
+          <div class="dz-error" id="chkError">Please add a photo or scan of your voided check.</div>
+        </div>
+
+        <div class="form-alert" id="formAlert" role="alert"></div>
+
+        <div class="submit-row">
+          <button type="submit" class="btn btn-green btn-submit" id="submitBtn"><i class="fa-solid fa-paper-plane"></i> Send My Documents</button>
+          <p class="submit-note"><i class="fa-solid fa-lock"></i> Your documents are emailed directly to our funding team at customerservice@quickfundscapital.com. <span id="totalSizeNote"></span></p>
+        </div>
+      </form>
+
+      <!-- Result panel -->
+      <section class="form-card result" id="resultPanel" aria-live="polite">
+        <div class="send-banner" id="sendBanner">
+          <i id="sendBannerIcon" class="fa-solid fa-circle-check"></i>
+          <div id="sendBannerText"></div>
+        </div>
+        <h2 id="resultTitle">Documents sent</h2>
+        <p class="intro-p" id="resultIntro"></p>
+        <div class="summary-box" id="summaryBox"></div>
+        <div class="result-actions">
+          <a class="btn btn-navy" id="mailtoBtn" href="#"><i class="fa-solid fa-envelope"></i> Email a Copy / Send Documents</a>
+          <button type="button" class="btn btn-ghost" id="copyBtn"><i class="fa-solid fa-copy"></i> Copy Summary</button>
+          <button type="button" class="btn btn-ghost" id="downloadBtn"><i class="fa-solid fa-download"></i> Download Summary</button>
+          <span class="copy-ok" id="copyOk">Copied ✓</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site">
+      <div class="wrap foot">
+        <span class="foot-brand">Quick Funds Capital</span>
+        <span><i class="fa-solid fa-phone"></i> <a href="tel:+17542802842">(754) 280-2842</a></span>
+        <span><i class="fa-solid fa-envelope"></i> <a href="mailto:customerservice@quickfundscapital.com">customerservice@quickfundscapital.com</a></span>
+        <span><a href="https://www.quickfundscapital.com/">quickfundscapital.com</a></span>
+      </div>
+    </footer>
+
+    <iframe name="portalBackupFrame" id="portalBackupFrame" title="" aria-hidden="true" style="display:none;width:0;height:0;border:0"></iframe>
+
+<script>
+var RECIPIENT = 'customerservice@quickfundscapital.com';
+var AJAX_ENDPOINT = 'https://formsubmit.co/ajax/' + RECIPIENT;
+var CLASSIC_ENDPOINT = 'https://formsubmit.co/' + RECIPIENT;
+
+var STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+
+var stateSel = document.getElementById('state');
+STATES.forEach(function(s){
+  var o = document.createElement('option'); o.value = s; o.textContent = s; stateSel.appendChild(o);
+});
+
+function $(id){ return document.getElementById(id); }
+function val(id){ var el = $(id); return el ? el.value.trim() : ''; }
+function fmtSize(bytes){
+  if(bytes < 1024) return bytes + ' B';
+  if(bytes < 1024*1024) return Math.round(bytes/1024) + ' KB';
+  return (bytes/(1024*1024)).toFixed(1) + ' MB';
+}
+function requiredMonths(){
+  var s = stateSel.value;
+  return (s === 'California' || s === 'New York') ? 4 : 3;
+}
+
+/* ---------- File state ---------- */
+var statements = [];      // array of File
+var licenseFile = null;   // File or null
+var checkFile = null;     // File or null
+
+function fileExtIcon(){ return 'fa-solid fa-file'; }
+
+function makeFileItem(file, onRemove, previewUrl){
+  var li = document.createElement('li');
+  li.className = 'file-item';
+  if(previewUrl){
+    var img = document.createElement('img');
+    img.className = 'thumb'; img.src = previewUrl; img.alt = '';
+    li.appendChild(img);
+  } else {
+    var ic = document.createElement('i');
+    ic.className = fileExtIcon(); ic.setAttribute('aria-hidden','true');
+    li.appendChild(ic);
+  }
+  var name = document.createElement('span');
+  name.className = 'fname'; name.textContent = file.name; name.title = file.name;
+  li.appendChild(name);
+  var size = document.createElement('span');
+  size.className = 'fsize'; size.textContent = fmtSize(file.size);
+  li.appendChild(size);
+  var btn = document.createElement('button');
+  btn.type = 'button'; btn.className = 'file-remove'; btn.setAttribute('aria-label','Remove ' + file.name);
+  btn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+  btn.addEventListener('click', onRemove);
+  li.appendChild(btn);
+  return li;
+}
+
+function previewFor(file){
+  if(file && file.type && file.type.indexOf('image/') === 0) return URL.createObjectURL(file);
+  return null;
+}
+
+/* ---------- Statements ---------- */
+var stmtInput = $('stmtInput'), stmtDrop = $('stmtDrop'), stmtList = $('stmtList');
+
+function addStatementFiles(fileListObj){
+  var incoming = Array.prototype.slice.call(fileListObj || []);
+  incoming.forEach(function(f){
+    var dup = statements.some(function(x){ return x.name === f.name && x.size === f.size; });
+    if(!dup) statements.push(f);
+  });
+  renderStatements();
+}
+function renderStatements(){
+  stmtList.innerHTML = '';
+  statements.forEach(function(f, i){
+    stmtList.appendChild(makeFileItem(f, function(){
+      statements.splice(i, 1); renderStatements();
+    }, null));
+  });
+  var req = requiredMonths();
+  var countEl = $('stmtCount');
+  countEl.textContent = statements.length + ' of ' + req + ' months added';
+  countEl.classList.toggle('met', statements.length >= req);
+  stmtDrop.classList.toggle('has-file', statements.length > 0);
+  if(statements.length >= req) $('stmtError').classList.remove('show');
+  updateChecklist(); updateTotalSize();
+}
+stmtDrop.addEventListener('click', function(){ stmtInput.click(); });
+stmtDrop.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); stmtInput.click(); } });
+stmtInput.addEventListener('change', function(){ addStatementFiles(stmtInput.files); stmtInput.value = ''; });
+['dragenter','dragover'].forEach(function(ev){ stmtDrop.addEventListener(ev, function(e){ e.preventDefault(); stmtDrop.classList.add('dragover'); }); });
+['dragleave','drop'].forEach(function(ev){ stmtDrop.addEventListener(ev, function(e){ e.preventDefault(); stmtDrop.classList.remove('dragover'); }); });
+stmtDrop.addEventListener('drop', function(e){ if(e.dataTransfer) addStatementFiles(e.dataTransfer.files); });
+
+/* ---------- Single-file zones (license / check) ---------- */
+function wireSingle(dropId, inputId, listId, setFile, errId){
+  var drop = $(dropId), input = $(inputId), list = $(listId);
+  function render(){
+    list.innerHTML = '';
+    var f = (dropId === 'licDrop') ? licenseFile : checkFile;
+    if(f){
+      list.appendChild(makeFileItem(f, function(){ setFile(null); render(); }, previewFor(f)));
+    }
+    drop.classList.toggle('has-file', !!f);
+    if(f) $(errId).classList.remove('show');
+    updateChecklist(); updateTotalSize();
+  }
+  drop.addEventListener('click', function(){ input.click(); });
+  drop.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); input.click(); } });
+  input.addEventListener('change', function(){
+    if(input.files && input.files[0]) setFile(input.files[0]);
+    input.value = '';
+    render();
+  });
+  ['dragenter','dragover'].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.add('dragover'); }); });
+  ['dragleave','drop'].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.remove('dragover'); }); });
+  drop.addEventListener('drop', function(e){
+    if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]){ setFile(e.dataTransfer.files[0]); render(); }
+  });
+  return render;
+}
+var renderLicense = wireSingle('licDrop','licInput','licList', function(f){ licenseFile = f; }, 'licError');
+var renderCheck = wireSingle('chkDrop','chkInput','chkList', function(f){ checkFile = f; }, 'chkError');
+
+/* ---------- State-driven requirement ---------- */
+function renderStateRequirement(){
+  var req = requiredMonths();
+  var s = stateSel.value;
+  var isCaNy = (s === 'California' || s === 'New York');
+  $('caNyNotice').classList.toggle('show', isCaNy);
+  if(isCaNy) $('caNyState').textContent = s;
+  $('stmtSub').innerHTML = 'Add your <b>' + req + ' most recent months</b> of business bank statements — one file per month. PDF, CSV, Excel, Word, images, and every other file type are accepted.';
+  $('ckStatementsCount').textContent = statements.length + ' of ' + req + ' months';
+  renderStatements();
+}
+stateSel.addEventListener('change', renderStateRequirement);
+
+/* ---------- Checklist & totals ---------- */
+function detailsComplete(){
+  return val('fullName') !== '' && val('bizName') !== '' &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('email')) &&
+    val('phone').replace(/\D/g,'').length >= 10 && stateSel.value !== '';
+}
+function updateChecklist(){
+  $('ckDetails').classList.toggle('done', detailsComplete());
+  var req = requiredMonths();
+  var stmtDone = statements.length >= req;
+  $('ckStatements').classList.toggle('done', stmtDone);
+  $('ckStatementsCount').textContent = statements.length + ' of ' + req + ' months';
+  $('ckLicense').classList.toggle('done', !!licenseFile);
+  $('ckCheck').classList.toggle('done', !!checkFile);
+}
+function totalBytes(){
+  var t = 0;
+  statements.forEach(function(f){ t += f.size; });
+  if(licenseFile) t += licenseFile.size;
+  if(checkFile) t += checkFile.size;
+  return t;
+}
+function updateTotalSize(){
+  var t = totalBytes();
+  $('totalSizeNote').textContent = t > 0 ? ('Total upload size: ' + fmtSize(t) + '.') : '';
+}
+['fullName','bizName','email','phone'].forEach(function(id){
+  $(id).addEventListener('input', updateChecklist);
+});
+
+/* ---------- Validation ---------- */
+function setFieldValid(id, ok){
+  var el = $(id);
+  el.classList.toggle('invalid', !ok);
+  el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+  var err = el.parentElement.querySelector('.error');
+  if(err) err.style.display = ok ? 'none' : 'block';
+  return ok;
+}
+function validateAll(){
+  var missing = [];
+  if(!setFieldValid('fullName', val('fullName') !== '')) missing.push('your full name');
+  if(!setFieldValid('bizName', val('bizName') !== '')) missing.push('your business name');
+  if(!setFieldValid('email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('email')))) missing.push('a valid email');
+  if(!setFieldValid('phone', val('phone').replace(/\D/g,'').length >= 10)) missing.push('a valid phone number');
+  if(!setFieldValid('state', stateSel.value !== '')) missing.push('the state you reside in');
+  var req = requiredMonths();
+  if(statements.length < req){
+    var err = $('stmtError');
+    err.textContent = 'Please add ' + req + ' months of bank statements — you have added ' + statements.length + ' of ' + req + '.' +
+      ((stateSel.value === 'California' || stateSel.value === 'New York') ? ' California and New York clients need 4 months.' : '');
+    err.classList.add('show');
+    missing.push(req + ' months of bank statements');
+  }
+  if(!licenseFile){ $('licError').classList.add('show'); missing.push('a photo of your driver\u2019s license'); }
+  if(!checkFile){ $('chkError').classList.add('show'); missing.push('a voided check'); }
+  return missing;
+}
+
+/* ---------- Submission ---------- */
+// Backup channel: FormSubmit's classic form endpoint, posted into a hidden
+// iframe so the page never navigates away. The classic POST is the flow
+// FormSubmit's one-time activation is built around, and once activated it
+// delivers the documents as a normal form post with attachments. Its
+// response can't be read cross-origin, so callers never claim it succeeded —
+// only that it was sent.
+function classicPost(fd){
+  try{
+    var f = document.createElement('form');
+    f.method = 'POST'; f.action = CLASSIC_ENDPOINT; f.target = 'portalBackupFrame';
+    f.enctype = 'multipart/form-data';
+    f.style.display = 'none'; f.setAttribute('aria-hidden','true');
+    fd.forEach(function(value, key){
+      if(typeof value === 'string'){
+        var inp = document.createElement('input');
+        inp.type = 'hidden'; inp.name = key; inp.value = value;
+        f.appendChild(inp);
+      }
+    });
+    fd.forEach(function(value, key){
+      if(typeof value !== 'string'){
+        try{
+          var inp = document.createElement('input');
+          inp.type = 'file'; inp.name = key;
+          var dt = new DataTransfer(); dt.items.add(value); inp.files = dt.files;
+          f.appendChild(inp);
+        }catch(e){ /* file could not be re-attached in this browser */ }
+      }
+    });
+    document.body.appendChild(f);
+    f.submit();
+    setTimeout(function(){ try{ f.remove(); }catch(e){} }, 4000);
+    return true;
+  }catch(e){ return false; }
+}
+
+function buildSummary(){
+  var req = requiredMonths();
+  var stmtNames = statements.map(function(f, i){ return '  Month ' + (i+1) + ': ' + f.name + ' (' + fmtSize(f.size) + ')'; }).join('\n');
+  var lines = [
+    'QUICK FUNDS CAPITAL — CLIENT DOCUMENTS','',
+    'Full name: ' + val('fullName'),
+    'Business: ' + val('bizName'),
+    'Email: ' + val('email'),
+    'Phone: ' + val('phone'),
+    'State of residence: ' + stateSel.value,
+    'Bank statements required: ' + req + ' months','',
+    'Bank statements attached (' + statements.length + '):',
+    stmtNames,
+    'Driver\u2019s license: ' + (licenseFile ? licenseFile.name + ' (' + fmtSize(licenseFile.size) + ')' : '—'),
+    'Voided check: ' + (checkFile ? checkFile.name + ' (' + fmtSize(checkFile.size) + ')' : '—')
+  ];
+  return lines.join('\n');
+}
+
+var summaryText = '', mailtoHref = '';
+
+function showResult(kind){
+  var panel = $('resultPanel'), banner = $('sendBanner');
+  $('summaryBox').textContent = summaryText;
+  $('mailtoBtn').href = mailtoHref;
+  panel.classList.remove('fallback');
+  if(kind === 'sent'){
+    banner.className = 'send-banner sent';
+    $('sendBannerIcon').className = 'fa-solid fa-circle-check';
+    $('sendBannerText').innerHTML = '<b>Documents sent.</b> Your files were delivered to our funding team at <b>' + RECIPIENT + '</b>. Your advisor will review them and reach out if anything else is needed.';
+    $('resultTitle').textContent = 'Documents received — thank you';
+    $('resultIntro').textContent = 'Here is a summary of what you sent, for your records. If you need us sooner, call (754) 280-2842.';
+  } else if(kind === 'activation'){
+    panel.classList.add('fallback');
+    banner.className = 'send-banner fallback';
+    $('sendBannerIcon').className = 'fa-solid fa-triangle-exclamation';
+    $('sendBannerText').innerHTML = '<b>Automatic delivery is not activated yet.</b> Our form service told us this portal still needs its one-time activation, so it would not deliver your documents automatically. We have just re-sent them through the backup form channel, which triggers a fresh <b>\u201cActivate Form\u201d</b> email to <b>' + RECIPIENT + '</b>. <b>To be safe:</b> tap <b>\u201cEmail a Copy / Send Documents\u201d</b> below, attach the same files in your email app, and send — or call us at (754) 280-2842 and we\u2019ll take them another way. Don\u2019t close this page until you\u2019ve sent or saved your summary.';
+    $('resultTitle').textContent = 'Your documents are ready — one tap to send them';
+    $('resultIntro').textContent = 'Use the email button below (it opens pre-filled — just attach the same files), copy the summary, or download it. Nothing you entered has been lost.';
+  } else {
+    panel.classList.add('fallback');
+    banner.className = 'send-banner fallback';
+    $('sendBannerIcon').className = 'fa-solid fa-triangle-exclamation';
+    $('sendBannerText').innerHTML = '<b>We couldn\u2019t confirm automatic delivery.</b> We also submitted your documents through a backup form channel, but we can\u2019t confirm they arrived — so to be safe, tap <b>\u201cEmail a Copy / Send Documents\u201d</b> to send them to <b>' + RECIPIENT + '</b> from your own email (attach the same files in your email app), or call us at (754) 280-2842. Don\u2019t close this page until you\u2019ve sent or saved your summary.';
+    $('resultTitle').textContent = 'Your documents are ready — one tap to send them';
+    $('resultIntro').textContent = 'Use the email button below (it opens pre-filled — just attach the same files), copy the summary, or download it. Nothing you entered has been lost.';
+  }
+  $('docForm').style.display = 'none';
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+$('docForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var alertBox = $('formAlert');
+  alertBox.classList.remove('show'); alertBox.textContent = '';
+  var missing = validateAll();
+  updateChecklist();
+  if(missing.length){
+    alertBox.innerHTML = '<b>Almost there — still needed:</b> ' + missing.join(', ') + '.';
+    alertBox.classList.add('show');
+    alertBox.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+
+  var req = requiredMonths();
+  summaryText = buildSummary();
+  var mailBody = summaryText + '\n\nI have attached the files listed above to this email.';
+  mailtoHref = 'mailto:' + RECIPIENT + '?subject=' + encodeURIComponent('Client Documents — ' + val('bizName') + ' (' + val('fullName') + ')') + '&body=' + encodeURIComponent(mailBody);
+
+  var btn = $('submitBtn');
+  var originalBtn = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Sending your documents…';
+
+  var fd = new FormData();
+  fd.append('_subject', 'New Client Documents — ' + val('bizName') + ' (' + val('fullName') + ')');
+  fd.append('_template', 'table');
+  fd.append('_captcha', 'false');
+  fd.append('_replyto', val('email'));
+  fd.append('_autoresponse', 'Thank you — Quick Funds Capital received your documents. Your funding advisor will review them and reach out if anything else is needed. If you need us sooner, call (754) 280-2842.');
+  fd.append('Full Name', val('fullName'));
+  fd.append('Business Name', val('bizName'));
+  fd.append('Email', val('email'));
+  fd.append('Phone', val('phone'));
+  fd.append('State of Residence', stateSel.value);
+  fd.append('Bank Statements Required', req + ' months' + ((stateSel.value === 'California' || stateSel.value === 'New York') ? ' (California / New York requirement)' : ''));
+  fd.append('Bank Statements Attached', statements.length + ' file(s): ' + statements.map(function(f){ return f.name; }).join(', '));
+  statements.forEach(function(f, i){ fd.append('Bank Statement ' + (i+1), f, f.name); });
+  if(licenseFile) fd.append('Drivers License', licenseFile, licenseFile.name);
+  if(checkFile) fd.append('Voided Check', checkFile, checkFile.name);
+
+  function finish(kind){ btn.disabled = false; btn.innerHTML = originalBtn; showResult(kind); }
+
+  if(!window.fetch){ classicPost(fd); finish('fallback'); return; }
+
+  var timedOut = false, controller = null, timer = null;
+  try{
+    if(window.AbortController){
+      controller = new AbortController();
+      timer = setTimeout(function(){ timedOut = true; try{ controller.abort(); }catch(e){} }, 60000);
+    }
+  }catch(e){}
+
+  fetch(AJAX_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Accept': 'application/json' },
+    body: fd,
+    signal: controller ? controller.signal : undefined
+  }).then(function(res){
+    return res.text().then(function(t){
+      if(timer) clearTimeout(timer);
+      var data = {}; try{ data = JSON.parse(t); }catch(e){}
+      var msg = (data && data.message) ? String(data.message) : '';
+      var okFlag = data && (data.success === true || data.success === 'true');
+      if(res.ok && okFlag){ finish('sent'); return; }
+      // FormSubmit explicitly says the form needs activation — re-send via
+      // the classic channel, which triggers the "Activate Form" email and,
+      // once activated, delivers the documents itself.
+      if(/activ/i.test(msg)){ classicPost(fd); finish('activation'); return; }
+      classicPost(fd); finish('fallback');
+    });
+  }).catch(function(){
+    if(timer) clearTimeout(timer);
+    classicPost(fd);
+    finish('fallback');
+  });
+});
+
+/* ---------- Summary actions ---------- */
+$('copyBtn').addEventListener('click', function(){
+  function done(){ var ok = $('copyOk'); ok.classList.add('show'); setTimeout(function(){ ok.classList.remove('show'); }, 2500); }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(summaryText).then(done).catch(function(){ fallbackCopy(); done(); });
+  } else { fallbackCopy(); done(); }
+  function fallbackCopy(){
+    var ta = document.createElement('textarea');
+    ta.value = summaryText; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    ta.remove();
+  }
+});
+$('downloadBtn').addEventListener('click', function(){
+  var blob = new Blob([summaryText], { type:'text/plain' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'quick-funds-capital-documents-summary.txt';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+});
+
+/* Init */
+renderStatements();
+renderLicense();
+renderCheck();
+updateChecklist();
+</script>
+</body>
+</html>
